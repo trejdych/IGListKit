@@ -134,6 +134,24 @@ NS_SWIFT_NAME(ListCollectionContext)
 
 /**
  Dequeues a cell from the collection view reuse pool.
+ 
+ @param cellClass The class of the cell you want to dequeue.
+ @param identifier The custom reuse identifier
+ @param sectionController The section controller requesting this information.
+ @param index The index of the cell.
+ 
+ @return A cell dequeued from the reuse pool or a newly created one.
+ 
+ @note This method uses a string representation of the cell class as the identifier.
+ */
+
+- (__kindof UICollectionViewCell *)dequeueReusableCellOfClass:(Class)cellClass
+                                               withIdentifier:(NSString *)identifier
+                                         forSectionController:(IGListSectionController *)sectionController
+                                                      atIndex:(NSInteger)index;
+
+/**
+ Dequeues a cell from the collection view reuse pool.
 
  @param nibName The name of the nib file.
  @param bundle The bundle in which to search for the nib file. If `nil`, this method searches the main bundle.
@@ -146,6 +164,26 @@ NS_SWIFT_NAME(ListCollectionContext)
  */
 - (__kindof UICollectionViewCell *)dequeueReusableCellWithNibName:(NSString *)nibName
                                                            bundle:(nullable NSBundle *)bundle
+                                             forSectionController:(IGListSectionController *)sectionController
+                                                          atIndex:(NSInteger)index;
+
+/**
+ Dequeues a cell from the collection view reuse pool.
+ 
+ @param nibName The name of the nib file.
+ @param bundle The bundle in which to search for the nib file. If `nil`, this method searches the main bundle.
+ @param identifier The custom reuse identifier
+ @param sectionController The section controller requesting this information.
+ @param index The index of the cell.
+ 
+ @return A cell dequeued from the reuse pool or a newly created one.
+ 
+ @note This method uses a string representation of the cell class as the identifier.
+ */
+
+- (__kindof UICollectionViewCell *)dequeueReusableCellWithNibName:(NSString *)nibName
+                                                           bundle:(nullable NSBundle *)bundle
+                                                   withIdentifier:(NSString *)identifier
                                              forSectionController:(IGListSectionController *)sectionController
                                                           atIndex:(NSInteger)index;
 

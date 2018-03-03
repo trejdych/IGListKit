@@ -931,13 +931,21 @@
 - (__kindof UICollectionViewCell *)dequeueReusableCellOfClass:(Class)cellClass
                                          forSectionController:(IGListSectionController *)sectionController
                                                       atIndex:(NSInteger)index {
+        NSString *identifier = IGListReusableViewIdentifier(cellClass, nil, nil);
+    return [self dequeueReusableCellOfClass:cellClass withIdentifier:identifier forSectionController:sectionController atIndex:index];
+}
+
+- (UICollectionViewCell *)dequeueReusableCellOfClass:(Class)cellClass
+                                      withIdentifier:(NSString *)identifier
+                                forSectionController:(IGListSectionController *)sectionController
+                                             atIndex:(NSInteger)index {
     IGAssertMainThread();
     IGParameterAssert(sectionController != nil);
     IGParameterAssert(cellClass != nil);
     IGParameterAssert(index >= 0);
     UICollectionView *collectionView = self.collectionView;
     IGAssert(collectionView != nil, @"Dequeueing cell of class %@ from section controller %@ without a collection view at index %zi", NSStringFromClass(cellClass), sectionController, index);
-    NSString *identifier = IGListReusableViewIdentifier(cellClass, nil, nil);
+    
     NSIndexPath *indexPath = [self indexPathForSectionController:sectionController index:index usePreviousIfInUpdateBlock:NO];
     if (![self.registeredCellClasses containsObject:cellClass]) {
         [self.registeredCellClasses addObject:cellClass];
@@ -962,6 +970,18 @@
                                                   bundle:(NSBundle *)bundle
                                     forSectionController:(IGListSectionController *)sectionController
                                                  atIndex:(NSInteger)index {
+    return [self dequeueReusableCellWithNibName:nibName
+                                         bundle:bundle
+                                 withIdentifier:nibName
+                           forSectionController:sectionController
+                                        atIndex:index];
+}
+
+- (UICollectionViewCell *)dequeueReusableCellWithNibName:(NSString *)nibName
+                                                  bundle:(NSBundle *)bundle
+                                          withIdentifier:(NSString *)identifier
+                                    forSectionController:(IGListSectionController *)sectionController
+                                                 atIndex:(NSInteger)index {
     IGAssertMainThread();
     IGParameterAssert([nibName length] > 0);
     IGParameterAssert(sectionController != nil);
@@ -974,7 +994,7 @@
         UINib *nib = [UINib nibWithNibName:nibName bundle:bundle];
         [collectionView registerNib:nib forCellWithReuseIdentifier:nibName];
     }
-    return [collectionView dequeueReusableCellWithReuseIdentifier:nibName forIndexPath:indexPath];
+    return [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
 }
 
 - (__kindof UICollectionReusableView *)dequeueReusableSupplementaryViewOfKind:(NSString *)elementKind
